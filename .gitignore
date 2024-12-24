@@ -72,6 +72,8 @@ Thumbs.db
 # External asset store assets
 /[Aa]ssets/Assets*
 /[Aa]ssets/Plugins*
+/[Aa]ssets/ExternalAssets*
+/[Aa]ssets/FirstPerson/Environment*
 /[Aa]ssets/Environment/External*    
 
 # Specific to your project structure
