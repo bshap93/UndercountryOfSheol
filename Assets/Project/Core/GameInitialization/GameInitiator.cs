@@ -108,8 +108,11 @@ namespace Project.Core.GameInitialization
 
         async Task StartNewGame()
         {
+            if (dungeonManager != null)
+            {
             var seed = Random.Range(0, int.MaxValue);
             await dungeonManager.GenerateNewDungeon(seed);
+            }
 
             // Spawn the player
             var initialSpawnPoint = FindObjectOfType<CheckPoint>();
