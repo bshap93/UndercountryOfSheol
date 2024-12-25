@@ -585,7 +585,7 @@ MonoBehaviour:
     OnResume:
       m_PersistentCalls:
         m_Calls: []
-    OnRevert:
+    OnChangeDirection:
       m_PersistentCalls:
         m_Calls: []
     OnComplete:
@@ -607,6 +607,7 @@ MonoBehaviour:
       m_PersistentCalls:
         m_Calls: []
   DebugActive: 0
+  InScriptDrivenPause: 0
   FeedbacksList:
   - rid: 4950072140132515847
   KeepPlayModeChanges: 0
@@ -622,11 +623,11 @@ MonoBehaviour:
         Active: 1
         UniqueID: -317236517
         Label: Sound
+        OriginalLabel: 
         ChannelMode: 0
         Channel: 0
         MMChannelDefinition: {fileID: 0}
         Chance: 100
-        DisplayColor: {r: 0, g: 0, b: 0, a: 1}
         Timing:
           TimescaleMode: 0
           ExcludeFromHoldingPauses: 0
@@ -1175,6 +1176,9 @@ SkinnedMeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 3
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -1471,7 +1475,7 @@ MonoBehaviour:
     OnResume:
       m_PersistentCalls:
         m_Calls: []
-    OnRevert:
+    OnChangeDirection:
       m_PersistentCalls:
         m_Calls: []
     OnComplete:
@@ -1493,6 +1497,7 @@ MonoBehaviour:
       m_PersistentCalls:
         m_Calls: []
   DebugActive: 0
+  InScriptDrivenPause: 0
   FeedbacksList:
   - rid: 509909688221696037
   KeepPlayModeChanges: 0
@@ -1508,11 +1513,11 @@ MonoBehaviour:
         Active: 1
         UniqueID: -1621935667
         Label: Sound
+        OriginalLabel: 
         ChannelMode: 0
         Channel: 0
         MMChannelDefinition: {fileID: 0}
         Chance: 100
-        DisplayColor: {r: 0, g: 0, b: 0, a: 1}
         Timing:
           TimescaleMode: 0
           ExcludeFromHoldingPauses: 0
@@ -1907,6 +1912,9 @@ SkinnedMeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 3
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -2533,7 +2541,7 @@ MonoBehaviour:
     OnResume:
       m_PersistentCalls:
         m_Calls: []
-    OnRevert:
+    OnChangeDirection:
       m_PersistentCalls:
         m_Calls: []
     OnComplete:
@@ -2555,6 +2563,7 @@ MonoBehaviour:
       m_PersistentCalls:
         m_Calls: []
   DebugActive: 0
+  InScriptDrivenPause: 0
   FeedbacksList:
   - rid: 0
   - rid: 1
@@ -2571,11 +2580,11 @@ MonoBehaviour:
         Active: 1
         UniqueID: -1058458761
         Label: Particles Play
+        OriginalLabel: 
         ChannelMode: 0
         Channel: 0
         MMChannelDefinition: {fileID: 0}
         Chance: 100
-        DisplayColor: {r: 0, g: 0, b: 0, a: 1}
         Timing:
           TimescaleMode: 0
           ExcludeFromHoldingPauses: 0
@@ -2657,11 +2666,11 @@ MonoBehaviour:
         Active: 1
         UniqueID: -1929796972
         Label: Sound
+        OriginalLabel: 
         ChannelMode: 0
         Channel: 0
         MMChannelDefinition: {fileID: 0}
         Chance: 100
-        DisplayColor: {r: 0, g: 0, b: 0, a: 1}
         Timing:
           TimescaleMode: 0
           ExcludeFromHoldingPauses: 0
@@ -7827,6 +7836,9 @@ ParticleSystemRenderer:
   m_ReflectionProbeUsage: 0
   m_RayTracingMode: 0
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 4294967295
   m_RendererPriority: 0
   m_Materials:
@@ -8334,7 +8346,7 @@ MonoBehaviour:
     OnResume:
       m_PersistentCalls:
         m_Calls: []
-    OnRevert:
+    OnChangeDirection:
       m_PersistentCalls:
         m_Calls: []
     OnComplete:
@@ -8356,6 +8368,7 @@ MonoBehaviour:
       m_PersistentCalls:
         m_Calls: []
   DebugActive: 0
+  InScriptDrivenPause: 0
   FeedbacksList:
   - rid: 0
   - rid: 1
@@ -8373,11 +8386,11 @@ MonoBehaviour:
         Active: 1
         UniqueID: 1711463569
         Label: Timescale Modifier
+        OriginalLabel: 
         ChannelMode: 0
         Channel: 0
         MMChannelDefinition: {fileID: 0}
         Chance: 100
-        DisplayColor: {r: 0, g: 0, b: 0, a: 1}
         Timing:
           TimescaleMode: 0
           ExcludeFromHoldingPauses: 0
@@ -8476,6 +8489,9 @@ MonoBehaviour:
             m_PostInfinity: 2
             m_RotationOrder: 4
           Initialized: 0
+          ConditionPropertyName: 
+          EnumConditionPropertyName: TimescaleLerpMode
+          EnumConditions: 0001000000000000000000000000000000000000000000000000000000000000
         TimescaleLerpDuration: 1
         TimeScaleLerpOnReset: 0
         TimescaleLerpCurveOnReset:
@@ -8506,6 +8522,9 @@ MonoBehaviour:
             m_PostInfinity: 2
             m_RotationOrder: 4
           Initialized: 0
+          ConditionPropertyName: 
+          EnumConditionPropertyName: TimescaleLerpMode
+          EnumConditions: 0001000000000000000000000000000000000000000000000000000000000000
         TimescaleLerpDurationOnReset: 1
     - rid: 1
       type: {class: MMF_ColorGrading, ns: MoreMountains.FeedbacksForThirdParty, asm: MoreMountains.Tools}
@@ -8513,11 +8532,11 @@ MonoBehaviour:
         Active: 1
         UniqueID: 1221870751
         Label: Color Grading
+        OriginalLabel: 
         ChannelMode: 0
         Channel: 0
         MMChannelDefinition: {fileID: 0}
         Chance: 100
-        DisplayColor: {r: 0, g: 0, b: 0, a: 1}
         Timing:
           TimescaleMode: 0
           ExcludeFromHoldingPauses: 0
@@ -8762,11 +8781,11 @@ MonoBehaviour:
         Active: 1
         UniqueID: 614904587
         Label: Sound
+        OriginalLabel: 
         ChannelMode: 0
         Channel: 0
         MMChannelDefinition: {fileID: 0}
         Chance: 100
-        DisplayColor: {r: 0, g: 0, b: 0, a: 1}
         Timing:
           TimescaleMode: 0
           ExcludeFromHoldingPauses: 0
@@ -8998,7 +9017,6 @@ CharacterController:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
@@ -9417,6 +9435,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   PreviewPanelUI: {fileID: 0}
+  SelectionFeedbacks: {fileID: 0}
+  DeselectionFeedbacks: {fileID: 0}
 --- !u!114 &2190125629540307051
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15152,6 +15172,9 @@ ParticleSystemRenderer:
   m_ReflectionProbeUsage: 0
   m_RayTracingMode: 0
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -20707,6 +20730,9 @@ ParticleSystemRenderer:
   m_ReflectionProbeUsage: 0
   m_RayTracingMode: 0
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -21033,6 +21059,9 @@ SkinnedMeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 3
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -21627,6 +21656,9 @@ SkinnedMeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 3
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -21896,6 +21928,9 @@ SkinnedMeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 3
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -22478,7 +22513,7 @@ MonoBehaviour:
     OnResume:
       m_PersistentCalls:
         m_Calls: []
-    OnRevert:
+    OnChangeDirection:
       m_PersistentCalls:
         m_Calls: []
     OnComplete:
@@ -22500,6 +22535,7 @@ MonoBehaviour:
       m_PersistentCalls:
         m_Calls: []
   DebugActive: 0
+  InScriptDrivenPause: 0
   FeedbacksList:
   - rid: 509909898710745088
   - rid: 509909898710745089
@@ -22517,11 +22553,11 @@ MonoBehaviour:
         Active: 1
         UniqueID: 1440117238
         Label: Sound
+        OriginalLabel: 
         ChannelMode: 0
         Channel: 0
         MMChannelDefinition: {fileID: 0}
         Chance: 100
-        DisplayColor: {r: 0, g: 0, b: 0, a: 1}
         Timing:
           TimescaleMode: 0
           ExcludeFromHoldingPauses: 0
@@ -22645,11 +22681,11 @@ MonoBehaviour:
         Active: 1
         UniqueID: 14356234
         Label: Sound
+        OriginalLabel: 
         ChannelMode: 0
         Channel: 0
         MMChannelDefinition: {fileID: 0}
         Chance: 100
-        DisplayColor: {r: 0, g: 0, b: 0, a: 1}
         Timing:
           TimescaleMode: 0
           ExcludeFromHoldingPauses: 0
@@ -22773,11 +22809,11 @@ MonoBehaviour:
         Active: 1
         UniqueID: 969874641
         Label: Sound
+        OriginalLabel: 
         ChannelMode: 0
         Channel: 0
         MMChannelDefinition: {fileID: 0}
         Chance: 100
-        DisplayColor: {r: 0, g: 0, b: 0, a: 1}
         Timing:
           TimescaleMode: 0
           ExcludeFromHoldingPauses: 0
@@ -27779,6 +27815,9 @@ ParticleSystemRenderer:
   m_ReflectionProbeUsage: 0
   m_RayTracingMode: 0
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 4294967295
   m_RendererPriority: 0
   m_Materials:
@@ -27970,7 +28009,6 @@ Transform:
   - {fileID: 7915113437398518031}
   - {fileID: 2895768555382868526}
   - {fileID: 6734955972866629237}
-  - {fileID: 1868709633142975947}
   - {fileID: 5886963527952489119}
   - {fileID: 2348078143257830354}
   - {fileID: 8924366015566573781}
@@ -27980,7 +28018,7 @@ Transform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!95 &8258521062231161220
 Animator:
-  serializedVersion: 5
+  serializedVersion: 7
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -27994,6 +28032,7 @@ Animator:
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
   m_WarningMessage: "\nBinding warning: Some generic clip(s) animate transforms that
     are already bound by a Humanoid avatar. These transforms can only be changed
     by Humanoid clips.\n\tTransform 'upperarm_r'\n\tTransform 'pelvis'\n\tTransform
@@ -28298,7 +28337,7 @@ MonoBehaviour:
     OnResume:
       m_PersistentCalls:
         m_Calls: []
-    OnRevert:
+    OnChangeDirection:
       m_PersistentCalls:
         m_Calls: []
     OnComplete:
@@ -28320,6 +28359,7 @@ MonoBehaviour:
       m_PersistentCalls:
         m_Calls: []
   DebugActive: 0
+  InScriptDrivenPause: 0
   FeedbacksList:
   - rid: 4950071984909451269
   KeepPlayModeChanges: 0
@@ -28335,11 +28375,11 @@ MonoBehaviour:
         Active: 1
         UniqueID: -750071147
         Label: Animation Parameter
+        OriginalLabel: 
         ChannelMode: 0
         Channel: 0
         MMChannelDefinition: {fileID: 0}
         Chance: 100
-        DisplayColor: {r: 0, g: 0, b: 0, a: 1}
         Timing:
           TimescaleMode: 0
           ExcludeFromHoldingPauses: 0
@@ -28580,210 +28620,6 @@ MonoBehaviour:
   InitialResource: 0
   OnDepletedFeedback: {fileID: 0}
   OnRestoredFeedback: {fileID: 0}
---- !u!1 &8882129007108833198
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1868709633142975947}
-  - component: {fileID: 5312542171142992163}
-  m_Layer: 0
-  m_Name: Cape_GEO
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1868709633142975947
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8882129007108833198}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: -0, y: 0.9093484, z: -1.063366}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 3427633103892770069}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!137 &5312542171142992163
-SkinnedMeshRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8882129007108833198}
-  m_Enabled: 1
-  m_CastShadows: 1
-  m_ReceiveShadows: 1
-  m_DynamicOccludee: 1
-  m_StaticShadowCaster: 0
-  m_MotionVectors: 1
-  m_LightProbeUsage: 1
-  m_ReflectionProbeUsage: 1
-  m_RayTracingMode: 3
-  m_RayTraceProcedural: 0
-  m_RenderingLayerMask: 1
-  m_RendererPriority: 0
-  m_Materials:
-  - {fileID: 2100000, guid: 01c7cfedcdc3a6140b6b47f9872d6a43, type: 2}
-  m_StaticBatchInfo:
-    firstSubMesh: 0
-    subMeshCount: 0
-  m_StaticBatchRoot: {fileID: 0}
-  m_ProbeAnchor: {fileID: 0}
-  m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
-  m_ReceiveGI: 1
-  m_PreserveUVs: 0
-  m_IgnoreNormalsForChartDetection: 0
-  m_ImportantGI: 0
-  m_StitchLightmapSeams: 1
-  m_SelectedEditorRenderState: 3
-  m_MinimumChartSize: 4
-  m_AutoUVMaxDistance: 0.5
-  m_AutoUVMaxAngle: 89
-  m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
-  serializedVersion: 2
-  m_Quality: 0
-  m_UpdateWhenOffscreen: 0
-  m_SkinnedMotionVectors: 1
-  m_Mesh: {fileID: 8370552635325213571, guid: 40a76dca71a67664686a8cfa7f2c1a88, type: 3}
-  m_Bones:
-  - {fileID: 1052471955812054758}
-  - {fileID: 3752068230294425137}
-  - {fileID: 4349516643881939053}
-  - {fileID: 453975790132010444}
-  - {fileID: 1269272906616506000}
-  - {fileID: 2235077839067213853}
-  - {fileID: 1346437197648390113}
-  - {fileID: 1723842299043574776}
-  - {fileID: 8554347363203504497}
-  - {fileID: 8829324378521986328}
-  - {fileID: 2208717289463297051}
-  - {fileID: 2060794163819205952}
-  - {fileID: 7431373380923744011}
-  - {fileID: 892535402700074004}
-  - {fileID: 1136500662690832658}
-  - {fileID: 3498852451177466717}
-  - {fileID: 506385596822872545}
-  - {fileID: 8274602174373143210}
-  - {fileID: 3517400114058825163}
-  - {fileID: 5514056324686478197}
-  - {fileID: 8334154796636110934}
-  - {fileID: 382295671943090571}
-  - {fileID: 1931563465424075111}
-  - {fileID: 955844643086472358}
-  - {fileID: 1199739535927008066}
-  - {fileID: 4424878201492913763}
-  - {fileID: 81488218731810555}
-  - {fileID: 1816292297481667979}
-  - {fileID: 2449813830576441079}
-  - {fileID: 3256959722704007187}
-  - {fileID: 7062921829765165528}
-  - {fileID: 6084198067017642229}
-  - {fileID: 2416717145965103875}
-  - {fileID: 8806332542934429637}
-  - {fileID: 3373187300292283996}
-  - {fileID: 4443260967784884271}
-  - {fileID: 6226084419845446124}
-  - {fileID: 5767467335924107821}
-  - {fileID: 203443064005014925}
-  - {fileID: 7247021824894238740}
-  - {fileID: 3047422795145000295}
-  - {fileID: 6629762948269728872}
-  - {fileID: 1216948979694862743}
-  - {fileID: 3615081671076935811}
-  - {fileID: 4055470293698700345}
-  - {fileID: 2017843119136675982}
-  - {fileID: 4997834787949718875}
-  - {fileID: 6130838304450091937}
-  - {fileID: 2116434355071050864}
-  - {fileID: 8234178550387457387}
-  - {fileID: 17097456499881469}
-  - {fileID: 6810937947638873719}
-  - {fileID: 1056567397886350334}
-  - {fileID: 2778071070964049173}
-  - {fileID: 8906332811610626781}
-  - {fileID: 3684311965080259460}
-  - {fileID: 999523912984190227}
-  - {fileID: 9086802053935572088}
-  - {fileID: 2147291143731387919}
-  - {fileID: 3685468813864984924}
-  - {fileID: 9068960773831796087}
-  - {fileID: 6363811806178567137}
-  - {fileID: 8534229648386915457}
-  - {fileID: 4387320292312044935}
-  - {fileID: 2645869766378658261}
-  - {fileID: 3932064903089870447}
-  - {fileID: 3032248021053123149}
-  - {fileID: 6072074232601731468}
-  - {fileID: 5957753002970005260}
-  - {fileID: 7721925844138347288}
-  - {fileID: 769046921976693080}
-  - {fileID: 5142638053427445188}
-  - {fileID: 9145617453721762541}
-  - {fileID: 4670841873544125602}
-  - {fileID: 4829356387601961764}
-  - {fileID: 6575005781403295976}
-  - {fileID: 5501352715212304706}
-  - {fileID: 4405166480013930088}
-  - {fileID: 4070515395427646706}
-  - {fileID: 1034133946124612320}
-  - {fileID: 7845876470783102286}
-  - {fileID: 6407476381480488456}
-  - {fileID: 6801887448866546253}
-  - {fileID: 1961065400134386969}
-  - {fileID: 8717392168941864325}
-  - {fileID: 4433514702069161450}
-  - {fileID: 8128204020522937583}
-  - {fileID: 7423838614906716936}
-  - {fileID: 4741056891696196384}
-  - {fileID: 6229863282652636545}
-  - {fileID: 2934384761935291799}
-  - {fileID: 1934052222099345203}
-  - {fileID: 5839681793559853463}
-  - {fileID: 5903698768823613142}
-  - {fileID: 3554763395504671154}
-  - {fileID: 8142608569880021619}
-  - {fileID: 818172614355213871}
-  - {fileID: 4486606562208303484}
-  - {fileID: 2033296658103918931}
-  - {fileID: 7854943173515244143}
-  - {fileID: 5017008457213726725}
-  - {fileID: 7934869322071245885}
-  - {fileID: 627799553860561245}
-  - {fileID: 1220955058735252752}
-  - {fileID: 4914707148651422735}
-  - {fileID: 8968888650299219742}
-  - {fileID: 3051322317666383691}
-  - {fileID: 2457006267030308764}
-  - {fileID: 911116769792311983}
-  - {fileID: 7381708523940013595}
-  - {fileID: 4972094458427497316}
-  - {fileID: 3110038408627684922}
-  - {fileID: 8736118074183143633}
-  - {fileID: 8809606491335544108}
-  - {fileID: 5749780004456175274}
-  - {fileID: 2353389053634573432}
-  - {fileID: 2305230999126272338}
-  - {fileID: 3281218717989639313}
-  - {fileID: 374198600677636226}
-  m_BlendShapeWeights: []
-  m_RootBone: {fileID: 1052471955812054758}
-  m_AABB:
-    m_Center: {x: 0.015784532, y: 0.077824175, z: 1.0021155}
-    m_Extent: {x: 0.3306242, y: 0.27287653, z: 0.67500544}
-  m_DirtyAABB: 0
 --- !u!1 &8903116570463274421
 GameObject:
   m_ObjectHideFlags: 0
@@ -29092,7 +28928,7 @@ MonoBehaviour:
     OnResume:
       m_PersistentCalls:
         m_Calls: []
-    OnRevert:
+    OnChangeDirection:
       m_PersistentCalls:
         m_Calls: []
     OnComplete:
@@ -29114,6 +28950,7 @@ MonoBehaviour:
       m_PersistentCalls:
         m_Calls: []
   DebugActive: 0
+  InScriptDrivenPause: 0
   FeedbacksList:
   - rid: 0
   - rid: 1
@@ -29136,11 +28973,11 @@ MonoBehaviour:
         Active: 1
         UniqueID: 651706268
         Label: Cinemachine Impulse
+        OriginalLabel: 
         ChannelMode: 0
         Channel: 0
         MMChannelDefinition: {fileID: 0}
         Chance: 100
-        DisplayColor: {r: 0, g: 0, b: 0, a: 1}
         Timing:
           TimescaleMode: 0
           ExcludeFromHoldingPauses: 0
@@ -29253,11 +29090,11 @@ MonoBehaviour:
         Active: 1
         UniqueID: -755670814
         Label: Flash
+        OriginalLabel: 
         ChannelMode: 0
         Channel: 0
         MMChannelDefinition: {fileID: 0}
         Chance: 100
-        DisplayColor: {r: 0, g: 0, b: 0, a: 1}
         Timing:
           TimescaleMode: 0
           ExcludeFromHoldingPauses: 0
@@ -29333,11 +29170,11 @@ MonoBehaviour:
         Active: 1
         UniqueID: -106754121
         Label: Chromatic Aberration
+        OriginalLabel: 
         ChannelMode: 0
         Channel: 0
         MMChannelDefinition: {fileID: 0}
         Chance: 100
-        DisplayColor: {r: 0, g: 0, b: 0, a: 1}
         Timing:
           TimescaleMode: 0
           ExcludeFromHoldingPauses: 0
@@ -29447,11 +29284,11 @@ MonoBehaviour:
         Active: 1
         UniqueID: 1400177361
         Label: Freeze Frame
+        OriginalLabel: 
         ChannelMode: 0
         Channel: 0
         MMChannelDefinition: {fileID: 0}
         Chance: 100
-        DisplayColor: {r: 0, g: 0, b: 0, a: 1}
         Timing:
           TimescaleMode: 0
           ExcludeFromHoldingPauses: 0
@@ -29523,11 +29360,11 @@ MonoBehaviour:
         Active: 1
         UniqueID: 1961872578
         Label: Sound
+        OriginalLabel: 
         ChannelMode: 0
         Channel: 0
         MMChannelDefinition: {fileID: 0}
         Chance: 100
-        DisplayColor: {r: 0, g: 0, b: 0, a: 1}
         Timing:
           TimescaleMode: 0
           ExcludeFromHoldingPauses: 0
@@ -29651,11 +29488,11 @@ MonoBehaviour:
         Active: 1
         UniqueID: -1391727532
         Label: Animation Parameter
+        OriginalLabel: 
         ChannelMode: 0
         Channel: 0
         MMChannelDefinition: {fileID: 0}
         Chance: 100
-        DisplayColor: {r: 0, g: 0, b: 0, a: 1}
         Timing:
           TimescaleMode: 0
           ExcludeFromHoldingPauses: 0
@@ -29755,12 +29592,12 @@ MonoBehaviour:
         Active: 1
         UniqueID: -503099763
         Label: Camera Shake
+        OriginalLabel: 
         ChannelMode: 1
         Channel: 3
         MMChannelDefinition: {fileID: 11400000, guid: 6ba165fd91edb434aa2f1cd6f6b05885,
           type: 2}
         Chance: 100
-        DisplayColor: {r: 0, g: 0, b: 0, a: 1}
         Timing:
           TimescaleMode: 0
           ExcludeFromHoldingPauses: 0
