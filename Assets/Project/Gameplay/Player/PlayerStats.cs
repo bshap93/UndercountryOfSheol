@@ -32,6 +32,12 @@ namespace Project.Gameplay.Player
         [SerializeField] List<string> chosenTraits; // Stores the trait names
         public float Health;
 
+        float _baseWalkSpeed;
+        float _baseRunSpeed;
+        
+        CharacterMovement _characterMovement;
+        CharacterRun _characterRun;
+
 
         public int playerCurrency;
 
@@ -76,6 +82,11 @@ namespace Project.Gameplay.Player
             // Store names for reference
             playerClass = creationData.selectedClassName;
             chosenTraits = new List<string>(creationData.selectedTraitNames);
+            _characterMovement = GetComponent<CharacterMovement>();
+            _characterRun = GetComponent<CharacterRun>();
+            _baseWalkSpeed = _characterMovement.WalkSpeed;
+            _baseRunSpeed   = _characterRun.RunSpeed;
+            
 
             XpManager.Initialize();
 
@@ -183,7 +194,8 @@ namespace Project.Gameplay.Player
 
             var characterMovement = gameObject.GetComponent<CharacterMovement>();
             // 6 is the base movement speed for the character, multiplied by the moveSpeedMult
-            if (characterMovement != null) characterMovement.WalkSpeed = moveSpeedMult * 6;
+            if (characterMovement != null) characterMovement.WalkSpeed = moveSpeedMult * _baseWalkSpeed;
+            if (_characterRun != null) _characterRun.RunSpeed = moveSpeedMult * _baseRunSpeed;
 
             // Debug.Log(
             //     $"Attributes applied to base stats: MaxHealth={maxHealth}, MoveSpeed={moveSpeedMult}, AttackPower={attackPower}, Defense={damageMult}");
