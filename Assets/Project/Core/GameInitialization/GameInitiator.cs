@@ -30,13 +30,14 @@ namespace Project.Core.GameInitialization
             }
 
             _instance = this;
+            
 
             // Find references in our prefab structure
             dungeonManager = GetComponentInChildren<NewDungeonManager>();
             _runtimeDungeon = GetComponentInChildren<RuntimeDungeon>();
 
             if (dungeonManager == null || _runtimeDungeon == null)
-                Debug.LogError("Missing required components in PortableSystems prefab!");
+                Debug.Log("DungeonManager or RuntimeDungeon not found in prefab structure.");
 
             // Check if NewSaveManager is already in the scene
             _saveManager = NewSaveManager.Instance;
