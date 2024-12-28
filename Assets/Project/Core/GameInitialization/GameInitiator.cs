@@ -116,8 +116,8 @@ namespace Project.Core.GameInitialization
             }
 
             // Spawn the player
-            var initialSpawnPoint = FindObjectOfType<CheckPoint>();
-            if (initialSpawnPoint == null) Debug.LogError("No CheckPoint found for initial spawn!");
+            // var initialSpawnPoint = FindObjectOfType<CheckPoint>();
+            // if (initialSpawnPoint == null) Debug.LogError("No CheckPoint found for initial spawn!");
         }
 
         void ApplyCharacterCreationDataToPlayer(GameObject playerGameObject)

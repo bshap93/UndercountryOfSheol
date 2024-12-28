@@ -26,7 +26,7 @@ namespace Project.Core.SaveSystem
         void Awake()
         {
             spawnPointManager = FindFirstObjectByType<SpawnPointManager>();
-            if (spawnPointManager == null) Debug.LogWarning("No SpawnPointManager found in scene!");
+            // if (spawnPointManager == null) Debug.LogWarning("No SpawnPointManager found in scene!");
 
             if (Instance == null)
             {
