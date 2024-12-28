@@ -33,6 +33,10 @@ crashlytics-build.properties
 /[Aa]ssets/[Ss]treamingAssets/aa.meta
 /[Aa]ssets/[Ss]treamingAssets/aa/*
 
+/[Aa]ssets/[Cc]haracter/Assets*
+/[Aa]ssets/Items/Assets*
+/[Aa]ssets/
+
 
 # Visual Studio / MonoDevelop generated
 .vs/

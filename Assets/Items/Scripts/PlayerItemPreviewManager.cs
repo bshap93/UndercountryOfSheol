@@ -1,192 +1,254 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using HighlightPlus;
-using MoreMountains.Feedbacks;
+﻿using UnityEngine;
+using System.Collections.Generic;
 using MoreMountains.InventoryEngine;
+using MoreMountains.Feedbacks;
 using MoreMountains.Tools;
 using Project.Gameplay.Events;
 using Project.UI.HUD;
-using UnityEngine;
 
 namespace Items.Scripts
 {
+    [DefaultExecutionOrder(100)]
     public class PlayerItemPreviewManager : MonoBehaviour, MMEventListener<ItemEvent>
     {
+        [Header("UI")]
         public GameObject PreviewPanelUI;
-
         public MMFeedbacks SelectionFeedbacks;
         public MMFeedbacks DeselectionFeedbacks;
-        readonly List<InventoryItem> _itemsInRange = new(); // List of items in range
-        readonly Dictionary<int, Transform> _itemTransforms = new(); // Dictionary of item transforms
-        HighlightManager _highlightManager;
 
+        [Header("Raycast Settings")]
+        public LayerMask layerMask = -1;
+        public Camera raycastCamera;
+        [Tooltip("Minimum distance for target.")]
+        public float minDistance;
+        [Tooltip("Maximum distance for target. 0 = infinity")]
+        public float maxDistance;
+        [Tooltip("Blocks interaction if pointer is over an UI element")]
+        public bool respectUI = true;
 
-        bool _isSorting;
-        PreviewManager _previewManager;
-        public InventoryItem CurrentPreviewedItem { get; private set; }
+        private PreviewManager _previewManager;
+        private Transform _currentTarget;
+        private InventoryItem _currentPreviewedItem;
+        private InventoryItem _selectedItem;
+        private readonly HashSet<InventoryItem> _registeredItems = new HashSet<InventoryItem>();
 
+        public InventoryItem CurrentPreviewedItem => _currentPreviewedItem;
+
+        static PlayerItemPreviewManager _instance;
+        public static PlayerItemPreviewManager instance {
+            get {
+                if (_instance == null) {
+                    _instance = FindFirstObjectByType<PlayerItemPreviewManager>();
+                }
+                return _instance;
+            }
+        }
 
         void Start()
         {
-            _previewManager = FindObjectOfType<PreviewManager>();
-            _highlightManager = FindObjectOfType<HighlightManager>();
+            _previewManager = FindFirstObjectByType<PreviewManager>();
+            if (_previewManager == null)
+            {
+                Debug.LogWarning("PreviewManager not found in the scene.");
+            }
 
-            if (_previewManager == null) Debug.LogWarning("PreviewManager not found in the scene.");
-            if (_highlightManager == null) Debug.LogWarning("HighlightManager not found in the scene.");
-        }
-
-        void Update()
-        {
-            DisplayNearestItem();
+            if (raycastCamera == null)
+            {
+                raycastCamera = GetCamera();
+                if (raycastCamera == null)
+                {
+                    Debug.LogError("PlayerItemPreviewManager: no camera found!");
+                }
+            }
         }
 
         void OnEnable()
         {
-            // Start listening for both MMGameEvent and MMCameraEvent
             this.MMEventStartListening();
         }
 
         void OnDisable()
         {
-            // Stop listening to avoid memory leaks
             this.MMEventStopListening();
+            ClearPreview();
         }
 
-
-        public void OnMMEvent(ItemEvent eventType)
+        void Update()
         {
-            if (eventType.EventName == "ItemPickupRangeEntered")
+            if (raycastCamera == null)
+                return;
+
+            // Check UI blocking
+            if (respectUI && IsBlockedByUI())
             {
-                _itemsInRange.Add(eventType.Item);
-
-
-                _itemTransforms.Add(eventType.Item.GetInstanceID(), eventType.ItemTransform);
-
-
-                ShowPreviewPanel(eventType.Item);
-
-                _highlightManager.SelectObject(eventType.ItemTransform);
-            }
-
-            if (eventType.EventName == "ItemPickupRangeExited" || eventType.EventName == "ItemPickedUp")
-            {
-                if (_itemsInRange.Contains(eventType.Item)) _itemsInRange.Remove(eventType.Item);
-
-                if (_itemTransforms.ContainsKey(eventType.Item.GetInstanceID()))
-                    _itemTransforms.Remove(eventType.Item.GetInstanceID());
-
-                if (_itemsInRange.Count == 0)
-                    HidePreviewPanel();
-                else
-                    ShowPreviewPanel(_itemsInRange[0]);
-
-                _highlightManager.UnselectObject(eventType.ItemTransform);
-            }
-        }
-
-        public void HidePreviewPanel()
-        {
-            if (PreviewPanelUI != null) PreviewPanelUI.SetActive(false);
-        }
-
-        public void ShowPreviewPanel(InventoryItem item)
-        {
-            if (PreviewPanelUI != null) PreviewPanelUI.SetActive(true);
-        }
-
-        public void ShowSelectedItemPreviewPanel(InventoryItem item)
-        {
-            if (PreviewPanelUI != null) PreviewPanelUI.SetActive(true);
-
-            Debug.Log("Item: " + item.name + " selected!");
-
-            _previewManager.ShowPreview(item);
-        }
-
-        void DisplayNearestItem()
-        {
-            if (_isSorting) return;
-
-            _isSorting = true;
-
-            var destroyedKeys = new List<int>();
-
-            foreach (var key in _itemTransforms.Keys.ToList())
-                if (_itemTransforms[key] == null)
-                    _itemTransforms.Remove(key);
-
-
-            foreach (var key in destroyedKeys) _itemTransforms.Remove(key);
-
-            // Remove null or destroyed items from the list
-            _itemsInRange.RemoveAll(item => item == null || !_itemTransforms.ContainsKey(item.GetInstanceID()));
-
-            if (_itemsInRange.Count == 0 || _previewManager == null)
-            {
-                if (CurrentPreviewedItem != null)
-                {
-                    _previewManager.HidePreview();
-                    CurrentPreviewedItem = null;
-                }
-
-                _isSorting = false;
+                HandleNoValidTarget();
                 return;
             }
 
-            // Sort to get the closest item
-            _itemsInRange.Sort(
-                (a, b) =>
-                {
-                    if (!_itemTransforms.ContainsKey(a.GetInstanceID()) ||
-                        !_itemTransforms.ContainsKey(b.GetInstanceID()))
-                        return 0; // Skip if either item transform is missing
+            // Create ray from mouse position or camera center
+            Ray ray = raycastCamera.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hitInfo;
 
-                    var transformA = _itemTransforms[a.GetInstanceID()];
-                    var transformB = _itemTransforms[b.GetInstanceID()];
-
-                    if (transformA == null ||
-                        transformB == null) return 0; // Skip if either item transform is destroyed
-
-                    return Vector3.Distance(transform.position, transformA.position)
-                        .CompareTo(Vector3.Distance(transform.position, transformB.position));
-                }
-            );
-
-            var closestItem = _itemsInRange[0];
-            if (CurrentPreviewedItem != closestItem)
+            // Check for hits
+            if (Physics.Raycast(ray, out hitInfo, maxDistance > 0 ? maxDistance : raycastCamera.farClipPlane, layerMask) && 
+                Vector3.Distance(hitInfo.point, ray.origin) >= minDistance)
             {
-                CurrentPreviewedItem = closestItem;
-                _previewManager.ShowPreview(CurrentPreviewedItem);
+                Transform target = hitInfo.collider.transform;
+                ItemPreviewTrigger previewTrigger = target.GetComponentInParent<ItemPreviewTrigger>();
+                
+                if (previewTrigger != null && previewTrigger.Item != null)
+                {
+                    // Handle hover preview
+                    HandleItemPreview(target, previewTrigger.Item);
+
+                    // Handle click selection
+                    if (Input.GetMouseButtonDown(0))
+                    {
+                        HandleItemSelection(target, previewTrigger);
+                    }
+                    return;
+                }
+
+                Debug.LogError("ItemPreviewTrigger not found in the target object.");
             }
 
-            _isSorting = false;
+            HandleNoValidTarget();
         }
 
+        private void HandleNoValidTarget()
+        {
+            // Only clear hover preview if we don't have a selected item
+            if (_selectedItem == null && _currentTarget != null)
+            {
+                ClearPreview();
+            }
+        }
+
+        private void HandleItemPreview(Transform target, InventoryItem item)
+        {
+            // Don't change preview if we have a selected item
+            if (_selectedItem != null)
+                return;
+
+            if (target != _currentTarget)
+            {
+                ClearPreview();
+                _currentTarget = target;
+                ShowPreview(item);
+            }
+        }
+
+        private void HandleItemSelection(Transform target, ItemPreviewTrigger trigger)
+        {
+            if (_selectedItem == trigger.Item)
+            {
+                // Deselect if clicking the same item
+                _selectedItem = null;
+                trigger.OnUnSelectedItem();
+            }
+            else
+            {
+                // Clear previous selection if exists
+                if (_selectedItem != null)
+                {
+                    var previousTrigger = _currentTarget.GetComponentInParent<ItemPreviewTrigger>();
+                    previousTrigger?.OnUnSelectedItem();
+                }
+
+                // Select new item
+                _selectedItem = trigger.Item;
+                trigger.OnSelectedItem();
+            }
+        }
+
+        private void ShowPreview(InventoryItem item)
+        {
+            if (item == null) return;
+
+            _currentPreviewedItem = item;
+            PreviewPanelUI?.SetActive(true);
+            _previewManager?.ShowPreview(item);
+        }
+
+        private void ClearPreview()
+        {
+            _currentTarget = null;
+            _currentPreviewedItem = null;
+            PreviewPanelUI?.SetActive(false);
+            _previewManager?.HidePreview();
+        }
+
+        public void OnMMEvent(ItemEvent eventType)
+        {
+            if (eventType.EventName == "ItemPickedUp")
+            {
+                if (_registeredItems.Contains(eventType.Item))
+                {
+                    UnregisterItem(eventType.Item);
+                }
+                
+                if (_selectedItem == eventType.Item)
+                {
+                    _selectedItem = null;
+                }
+            }
+        }
 
         public void RegisterItem(InventoryItem item)
         {
-            if (!_itemsInRange.Contains(item)) _itemsInRange.Add(item);
-            Debug.Log("Item registered");
+            if (item != null)
+            {
+                _registeredItems.Add(item);
+            }
         }
 
         public void UnregisterItem(InventoryItem item)
         {
-            if (_itemsInRange.Contains(item))
+            if (item != null)
             {
-                _itemsInRange.Remove(item);
-
-                // Reset current item if it was removed
-                if (CurrentPreviewedItem == item)
+                _registeredItems.Remove(item);
+                if (_currentPreviewedItem == item)
                 {
-                    _previewManager.HidePreview();
-                    CurrentPreviewedItem = null;
+                    ClearPreview();
                 }
             }
         }
+
+        private bool IsBlockedByUI()
+        {
+            if (UnityEngine.EventSystems.EventSystem.current == null)
+                return false;
+
+            return UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject();
+        }
+
+        private static Camera GetCamera()
+        {
+            Camera raycastCamera = Camera.main;
+            if (raycastCamera == null)
+            {
+                raycastCamera = FindFirstObjectByType<Camera>();
+            }
+            return raycastCamera;
+        }
+
+        // Public methods for manual control
+        public void ShowSelectedItemPreviewPanel(InventoryItem item)
+        {
+            if (item == null) return;
+            
+            _selectedItem = item;
+            PreviewPanelUI?.SetActive(true);
+            _previewManager?.ShowPreview(item);
+            SelectionFeedbacks?.PlayFeedbacks();
+            Debug.Log($"Item: {item.name} selected!");
+        }
+
         public void HideSelectedItemPreviewPanel()
         {
-            if (PreviewPanelUI != null) PreviewPanelUI.SetActive(false);
-            _previewManager.HidePreview();
+            _selectedItem = null;
+            ClearPreview();
+            DeselectionFeedbacks?.PlayFeedbacks();
             Debug.Log("Item unselected!");
         }
     }

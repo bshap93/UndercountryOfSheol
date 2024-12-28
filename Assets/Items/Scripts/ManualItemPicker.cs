@@ -1,142 +1,191 @@
+using UnityEngine;
 using MoreMountains.Feedbacks;
 using MoreMountains.InventoryEngine;
 using Project.Gameplay.Events;
 using Project.Gameplay.ItemManagement;
 using Project.Gameplay.ItemManagement.InventoryItemTypes;
 using Project.Gameplay.Player;
-using Project.Gameplay.Player.Inventory;
 using Project.UI.HUD;
-using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace Items.Scripts
 {
+    [RequireComponent(typeof(Collider))]
     public class ManualItemPicker : MonoBehaviour
     {
-        public InventoryItem Item; // The item to be picked up
+        public InventoryItem Item;
         public int Quantity = 1;
 
-        [FormerlySerializedAs("PickedMMFeedbacks")]
+        [Header("Pickup Settings")]
+        [Tooltip("Maximum distance at which the player can pick up this item")]
+        public float maxPickupDistance = 3f;
+        [Tooltip("Layer mask for pickup raycast")]
+        public LayerMask pickupLayerMask = -1;
+
         [Header("Feedbacks")]
         [Tooltip("Feedbacks to play when the item is picked up")]
-        public MMFeedbacks pickedMmFeedbacks; // Feedbacks to play when the item is picked up
+        public MMFeedbacks pickedMmFeedbacks;
 
-        bool _isInRange;
-        PromptManager _promptManager;
-        MoreMountains.InventoryEngine.Inventory _targetInventory;
+        private PromptManager _promptManager;
+        private MoreMountains.InventoryEngine.Inventory _targetInventory;
+        private Collider _itemCollider;
+        private bool _isInRange;
+        private Transform _playerTransform;
+        private PlayerItemPreviewManager _previewManager;
 
-        void Start()
+        private void Start()
+        {
+            InitializeComponents();
+            InitializeInventory();
+            InitializeFeedbacks();
+        }
+
+        private void InitializeComponents()
         {
             _promptManager = FindFirstObjectByType<PromptManager>();
             if (_promptManager == null) Debug.LogWarning("PickupPromptManager not found in the scene.");
 
-
-            // Locate PortableSystems and retrieve the appropriate inventory
-            var portableSystems = GameObject.Find("PortableSystems");
-            if (portableSystems != null)
-            {
-                if (Item.TargetInventoryName == "MainPlayerInventory")
-                    _targetInventory = GameObject.FindWithTag("MainPlayerInventory")
-                        ?.GetComponent<MoreMountains.InventoryEngine.Inventory>();
-                else if (Item.TargetInventoryName == "HotbarInventory")
-                    _targetInventory = GameObject.FindWithTag("HotbarInventory")
-                        ?.GetComponent<HotbarInventory>();
-                else
-                    _targetInventory = GameObject.FindWithTag("MainPlayerInventory")
-                        ?.GetComponent<MoreMountains.InventoryEngine.Inventory>();
-            }
-
-            if (_targetInventory == null) Debug.LogWarning("Target inventory not found in PortableSystems.");
-
-            // Initialize feedbacks
-            if (pickedMmFeedbacks != null) pickedMmFeedbacks.Initialization(gameObject);
+            _itemCollider = GetComponent<Collider>();
+            if (_itemCollider == null) Debug.LogWarning("No Collider found on ManualItemPicker.");
         }
 
-        void Update()
+        private void InitializeInventory()
         {
-            if (_isInRange && UnityEngine.Input.GetKeyDown(KeyCode.F)) PickItem();
+            string inventoryTag = Item.TargetInventoryName switch
+            {
+                "MainPlayerInventory" => "MainPlayerInventory",
+                "HotbarInventory" => "HotbarInventory",
+                _ => "MainPlayerInventory"
+            };
+
+            _targetInventory = GameObject.FindWithTag(inventoryTag)?.GetComponent<MoreMountains.InventoryEngine.Inventory>();
+            if (_targetInventory == null) Debug.LogWarning($"Target inventory '{inventoryTag}' not found.");
         }
 
-        void OnTriggerEnter(Collider itemPickerCollider)
+        private void InitializeFeedbacks()
         {
-            if (itemPickerCollider.CompareTag("Player"))
-            {
-                _isInRange = true;
-                _promptManager?.ShowPickupPrompt();
-                ItemEvent.Trigger("ItemPickupRangeEntered", Item, transform);
-            }
+            pickedMmFeedbacks?.Initialization(gameObject);
         }
 
-        void OnTriggerExit(Collider collider)
+        private void Update()
         {
-            if (collider.CompareTag("Player"))
+            if (!_isInRange || _playerTransform == null) return;
+
+            // Check if we're looking at the item
+            bool isLookingAtItem = CheckIfLookingAtItem();
+            
+            // Check if we're within pickup distance
+            bool isWithinDistance = CheckDistanceToPlayer();
+
+            // Only allow pickup if both conditions are met
+            if (isLookingAtItem && isWithinDistance && Input.GetKeyDown(KeyCode.F))
             {
-                _isInRange = false;
-                _promptManager?.HidePickupPrompt();
-                ItemEvent.Trigger("ItemPickupRangeExited", Item, transform);
+                TryPickupItem();
             }
         }
 
-
-        void PickItem()
+        private bool CheckIfLookingAtItem()
         {
-            if (Item == null) return;
+            if (_previewManager == null || _previewManager.CurrentPreviewedItem != Item)
+                return false;
 
-            // Get reference to the PlayerItemPreviewManager
-            var player = GameObject.FindWithTag("Player");
-            if (player == null) return;
+            return true;
+        }
 
-            var previewManager = player.GetComponent<PlayerItemPreviewManager>();
-            if (previewManager == null) return;
+        private bool CheckDistanceToPlayer()
+        {
+            if (_playerTransform == null) return false;
 
-            // Only pick up the item if it is the currently previewed item
-            if (previewManager.CurrentPreviewedItem != Item)
+            // Get the closest point on the item's collider to the player
+            Vector3 closestPoint = _itemCollider.ClosestPoint(_playerTransform.position);
+            float distance = Vector3.Distance(_playerTransform.position, closestPoint);
+
+            return distance <= maxPickupDistance;
+        }
+
+        private void OnTriggerEnter(Collider other)
+        {
+            if (!other.CompareTag("Player")) return;
+
+            _isInRange = true;
+            _playerTransform = other.transform;
+            _previewManager = other.GetComponent<PlayerItemPreviewManager>();
+            
+            if (_previewManager == null)
             {
+                Debug.LogWarning("PlayerItemPreviewManager not found on player.");
                 return;
             }
 
-            // If the item is a coin, add coins directly to PlayerStats and skip inventory
+            _promptManager?.ShowPickupPrompt();
+            ItemEvent.Trigger("ItemPickupRangeEntered", Item, transform);
+        }
+
+        private void OnTriggerExit(Collider other)
+        {
+            if (!other.CompareTag("Player")) return;
+
+            _isInRange = false;
+            _playerTransform = null;
+            _previewManager = null;
+            
+            _promptManager?.HidePickupPrompt();
+            ItemEvent.Trigger("ItemPickupRangeExited", Item, transform);
+        }
+
+        private void TryPickupItem()
+        {
+            if (Item == null) return;
+
             if (Item is InventoryCoinPickup coinPickup)
             {
-                var playerStats = player.GetComponent<PlayerStats>();
-                if (playerStats != null)
-                {
-                    // Determine how many coins to add
-                    var coinsToAdd = Random.Range(coinPickup.MinimumCoins, coinPickup.MaximumCoins + 1);
-                    playerStats.AddCoins(coinsToAdd);
-                }
-
-                // Play feedbacks on successful pickup
-                pickedMmFeedbacks?.PlayFeedbacks();
-
-                // Destroy the item after pickup
-                Destroy(gameObject);
+                HandleCoinPickup(coinPickup);
             }
             else
             {
-                // Standard inventory handling
-                if (_targetInventory != null)
-                {
-                    if (_targetInventory.AddItem(Item, Quantity))
-                    {
-                        _promptManager?.HidePickupPrompt();
-                        ItemEvent.Trigger("ItemPickedUp", Item, transform);
-                        pickedMmFeedbacks?.PlayFeedbacks();
-                        Destroy(gameObject);
-                    }
-                    else
-                    {
-                        ShowInventoryFullMessage();
-                    }
-                }
+                HandleInventoryItemPickup();
             }
         }
 
+        private void HandleCoinPickup(InventoryCoinPickup coinPickup)
+        {
+            if (_playerTransform == null) return;
 
-        void ShowInventoryFullMessage()
+            var playerStats = _playerTransform.GetComponent<PlayerStats>();
+            if (playerStats != null)
+            {
+                int coinsToAdd = Random.Range(coinPickup.MinimumCoins, coinPickup.MaximumCoins + 1);
+                playerStats.AddCoins(coinsToAdd);
+                
+                CompletePickup();
+            }
+        }
+
+        private void HandleInventoryItemPickup()
+        {
+            if (_targetInventory == null) return;
+
+            if (_targetInventory.AddItem(Item, Quantity))
+            {
+                CompletePickup();
+            }
+            else
+            {
+                ShowInventoryFullMessage();
+            }
+        }
+
+        private void CompletePickup()
+        {
+            _promptManager?.HidePickupPrompt();
+            ItemEvent.Trigger("ItemPickedUp", Item, transform);
+            pickedMmFeedbacks?.PlayFeedbacks();
+            Destroy(gameObject);
+        }
+
+        private void ShowInventoryFullMessage()
         {
             Debug.Log("Inventory is full or item cannot be picked up.");
-            // Additional UI feedback for full inventory, if needed
+            // Additional UI feedback for full inventory could be added here
         }
     }
 }
