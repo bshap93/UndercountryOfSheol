@@ -4,6 +4,8 @@ using MoreMountains.InventoryEngine;
 using MoreMountains.Feedbacks;
 using MoreMountains.Tools;
 using Project.Gameplay.Events;
+using Project.Gameplay.ItemManagement.InventoryItemTypes;
+using Project.Gameplay.Player;
 using Project.UI.HUD;
 
 namespace Items.Scripts
@@ -15,6 +17,9 @@ namespace Items.Scripts
         public GameObject PreviewPanelUI;
         public MMFeedbacks SelectionFeedbacks;
         public MMFeedbacks DeselectionFeedbacks;
+        
+        public Inventory PrimaryInventory;
+        public Inventory SecondaryInventory;
 
         [Header("Raycast Settings")]
         public LayerMask layerMask = -1;
@@ -31,6 +36,8 @@ namespace Items.Scripts
         private InventoryItem _currentPreviewedItem;
         private InventoryItem _selectedItem;
         private readonly HashSet<InventoryItem> _registeredItems = new HashSet<InventoryItem>();
+        private PromptManager _promptManager; 
+        
 
         public InventoryItem CurrentPreviewedItem => _currentPreviewedItem;
 
@@ -51,6 +58,11 @@ namespace Items.Scripts
             {
                 Debug.LogWarning("PreviewManager not found in the scene.");
             }
+            
+            _promptManager = FindFirstObjectByType<PromptManager>();
+            if (_promptManager == null) Debug.LogWarning("PickupPromptManager not found in the scene.");
+
+
 
             if (raycastCamera == null)
             {
@@ -70,8 +82,13 @@ namespace Items.Scripts
         void OnDisable()
         {
             this.MMEventStopListening();
-            ClearPreview();
+
+            if (this != null) // Check if the script itself is being destroyed
+            {
+                ClearPreview();
+            }
         }
+
 
         void Update()
         {
@@ -100,6 +117,12 @@ namespace Items.Scripts
                 {
                     // Handle hover preview
                     HandleItemPreview(target, previewTrigger.Item);
+                    _promptManager?.ShowPickupPrompt();
+                    
+                    if (Input.GetKey("f"))
+                    {
+                        TryPickupItem(previewTrigger);
+                    }
 
                     // Handle click selection
                     if (Input.GetMouseButtonDown(0))
@@ -114,6 +137,76 @@ namespace Items.Scripts
 
             HandleNoValidTarget();
         }
+        
+        private void TryPickupItem(ItemPreviewTrigger trigger)
+        {
+            if (trigger.Item == null) return;
+
+            if (trigger.Item is InventoryCoinPickup coinPickup)
+            {
+                HandleCoinPickup(coinPickup, trigger);
+            }
+            else
+            {
+                HandleInventoryItemPickup(trigger);
+            }
+        }
+        
+        private void HandleInventoryItemPickup(ItemPreviewTrigger trigger)
+        {
+            var Item = trigger.Item;
+            var Quantity = trigger.Quantity;
+            var inventoryTagName = trigger.TargetInventoryTagName;
+            
+            
+            if (PrimaryInventory == null) Debug.LogWarning($"Target inventory '{inventoryTagName}' not found.");
+            
+            if (PrimaryInventory == null) return;
+
+            if (PrimaryInventory.AddItem(Item, Quantity))
+            {
+                CompletePickup(trigger);
+            }
+            else
+            {
+                ShowInventoryFullMessage();
+            }
+        }
+        
+        private void CompletePickup(ItemPreviewTrigger trigger)
+        {
+            if (_promptManager != null)
+            {
+                _promptManager.HidePickupPrompt();
+            }
+    
+            if (trigger.PickedMMFeedbacks != null)
+            {
+                trigger.PickedMMFeedbacks.PlayFeedbacks();
+            }
+
+            // Trigger item picked up event
+            ItemEvent.Trigger("ItemPickedUp", trigger.Item, transform);
+
+            // Destroy the item at the end
+            Destroy(trigger.gameObject);
+        }
+
+        
+        private void HandleCoinPickup(InventoryCoinPickup coinPickup, ItemPreviewTrigger trigger)
+        {
+
+            var playerStats = GetComponent<PlayerStats>();
+            if (playerStats != null)
+            {
+                int coinsToAdd = Random.Range(coinPickup.MinimumCoins, coinPickup.MaximumCoins + 1);
+                playerStats.AddCoins(coinsToAdd);
+                
+                CompletePickup(trigger);
+            }
+        }
+        
+        
 
         private void HandleNoValidTarget()
         {
@@ -121,6 +214,7 @@ namespace Items.Scripts
             if (_selectedItem == null && _currentTarget != null)
             {
                 ClearPreview();
+                _promptManager?.HidePickupPrompt();
             }
         }
 
@@ -174,9 +268,21 @@ namespace Items.Scripts
         {
             _currentTarget = null;
             _currentPreviewedItem = null;
-            PreviewPanelUI?.SetActive(false);
-            _previewManager?.HidePreview();
+
+            if (PreviewPanelUI != null)
+            {
+                if (PreviewPanelUI.activeInHierarchy) // Ensure the GameObject is not destroyed
+                {
+                    PreviewPanelUI.SetActive(false);
+                }
+            }
+
+            if (_previewManager != null)
+            {
+                _previewManager.HidePreview();
+            }
         }
+
 
         public void OnMMEvent(ItemEvent eventType)
         {
@@ -241,7 +347,6 @@ namespace Items.Scripts
             PreviewPanelUI?.SetActive(true);
             _previewManager?.ShowPreview(item);
             SelectionFeedbacks?.PlayFeedbacks();
-            Debug.Log($"Item: {item.name} selected!");
         }
 
         public void HideSelectedItemPreviewPanel()
@@ -249,7 +354,12 @@ namespace Items.Scripts
             _selectedItem = null;
             ClearPreview();
             DeselectionFeedbacks?.PlayFeedbacks();
-            Debug.Log("Item unselected!");
+        }
+        
+        private void ShowInventoryFullMessage()
+        {
+            Debug.Log("Inventory is full or item cannot be picked up.");
+            // Additional UI feedback for full inventory could be added here
         }
     }
 }

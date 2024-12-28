@@ -111,9 +111,9 @@ namespace Project.Gameplay.ItemManagement
         {
             if (_altCharacterHandleWeapon == null || _characterHandleShield == null || _characterHandleTorch == null)
             {
-                _altCharacterHandleWeapon = FindObjectOfType<AltCharacterHandleWeapon>();
-                _characterHandleShield = FindObjectOfType<CharacterHandleShield>();
-                _characterHandleTorch = FindObjectOfType<CharacterHandleTorch>();
+                _altCharacterHandleWeapon = FindFirstObjectByType<AltCharacterHandleWeapon>();
+                _characterHandleShield = FindFirstObjectByType<CharacterHandleShield>();
+                _characterHandleTorch = FindFirstObjectByType<CharacterHandleTorch>();
             }
 
             if (_altCharacterHandleWeapon == null || _characterHandleShield == null || _characterHandleTorch == null)

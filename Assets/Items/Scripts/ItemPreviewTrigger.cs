@@ -4,6 +4,7 @@ using MoreMountains.Tools;
 using MoreMountains.TopDownEngine;
 using Project.Gameplay.Player.Inventory;
 using UnityEngine;
+using UnityEngine.Serialization;
 using MMFeedbacks = MoreMountains.Feedbacks.MMFeedbacks;
 
 namespace Items.Scripts
@@ -16,6 +17,9 @@ namespace Items.Scripts
         [SerializeField] MMFeedbacks _deselectionFeedbacks;
 
         PlayerItemPreviewManager _previewManager;
+        public MMFeedbacks PickedMMFeedbacks;
+        [FormerlySerializedAs("TargetInventoryName")] public string TargetInventoryTagName;
+        public int Quantity = 1;
 
         void OnEnable()
         {
@@ -71,7 +75,7 @@ namespace Items.Scripts
         {
             if (_previewManager == null)
             {
-                _previewManager = FindObjectOfType<PlayerItemPreviewManager>();
+                _previewManager = FindFirstObjectByType<PlayerItemPreviewManager>();
                 Debug.LogWarning("PreviewManager not found in the scene.");
             }
 

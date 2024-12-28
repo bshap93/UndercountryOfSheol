@@ -136,7 +136,6 @@ namespace Project.Core.SaveSystem
                     return true;
                 }
 
-                Debug.LogWarning("No save file found. Starting a new game.");
                 CurrentSave = new SaveData(); // Initialize with default save data
                 return false;
             }

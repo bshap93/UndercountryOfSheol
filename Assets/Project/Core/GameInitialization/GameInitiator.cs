@@ -91,7 +91,6 @@ namespace Project.Core.GameInitialization
 
             if (!hasSave)
             {
-                Debug.Log("No valid save found. Starting a new game.");
                 await StartNewGame();
             }
             else

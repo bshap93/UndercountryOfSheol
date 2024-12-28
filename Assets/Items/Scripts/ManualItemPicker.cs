@@ -44,8 +44,6 @@ namespace Items.Scripts
             _promptManager = FindFirstObjectByType<PromptManager>();
             if (_promptManager == null) Debug.LogWarning("PickupPromptManager not found in the scene.");
 
-            _itemCollider = GetComponent<Collider>();
-            if (_itemCollider == null) Debug.LogWarning("No Collider found on ManualItemPicker.");
         }
 
         private void InitializeInventory()
@@ -68,13 +66,22 @@ namespace Items.Scripts
 
         private void Update()
         {
-            if (!_isInRange || _playerTransform == null) return;
 
             // Check if we're looking at the item
             bool isLookingAtItem = CheckIfLookingAtItem();
             
             // Check if we're within pickup distance
             bool isWithinDistance = CheckDistanceToPlayer();
+            
+            if (isLookingAtItem && isWithinDistance)
+            {
+                _promptManager?.ShowPickupPrompt();
+                Debug.Log("Press F to pick up item.");
+            }
+            else
+            {
+                _promptManager?.HidePickupPrompt();
+            }
 
             // Only allow pickup if both conditions are met
             if (isLookingAtItem && isWithinDistance && Input.GetKeyDown(KeyCode.F))
@@ -102,35 +109,7 @@ namespace Items.Scripts
             return distance <= maxPickupDistance;
         }
 
-        private void OnTriggerEnter(Collider other)
-        {
-            if (!other.CompareTag("Player")) return;
 
-            _isInRange = true;
-            _playerTransform = other.transform;
-            _previewManager = other.GetComponent<PlayerItemPreviewManager>();
-            
-            if (_previewManager == null)
-            {
-                Debug.LogWarning("PlayerItemPreviewManager not found on player.");
-                return;
-            }
-
-            _promptManager?.ShowPickupPrompt();
-            ItemEvent.Trigger("ItemPickupRangeEntered", Item, transform);
-        }
-
-        private void OnTriggerExit(Collider other)
-        {
-            if (!other.CompareTag("Player")) return;
-
-            _isInRange = false;
-            _playerTransform = null;
-            _previewManager = null;
-            
-            _promptManager?.HidePickupPrompt();
-            ItemEvent.Trigger("ItemPickupRangeExited", Item, transform);
-        }
 
         private void TryPickupItem()
         {
