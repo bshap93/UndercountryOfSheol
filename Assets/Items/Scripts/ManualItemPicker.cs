@@ -3,11 +3,13 @@ using MoreMountains.InventoryEngine;
 using Project.Gameplay.Events;
 using Project.Gameplay.ItemManagement;
 using Project.Gameplay.ItemManagement.InventoryItemTypes;
+using Project.Gameplay.Player;
+using Project.Gameplay.Player.Inventory;
 using Project.UI.HUD;
 using UnityEngine;
 using UnityEngine.Serialization;
 
-namespace Project.Gameplay.Player.Inventory
+namespace Items.Scripts
 {
     public class ManualItemPicker : MonoBehaviour
     {
@@ -25,7 +27,7 @@ namespace Project.Gameplay.Player.Inventory
 
         void Start()
         {
-            _promptManager = FindObjectOfType<PromptManager>();
+            _promptManager = FindFirstObjectByType<PromptManager>();
             if (_promptManager == null) Debug.LogWarning("PickupPromptManager not found in the scene.");
 
 

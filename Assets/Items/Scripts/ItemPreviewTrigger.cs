@@ -4,8 +4,9 @@ using MoreMountains.Tools;
 using MoreMountains.TopDownEngine;
 using Project.Gameplay.Player.Inventory;
 using UnityEngine;
+using MMFeedbacks = MoreMountains.Feedbacks.MMFeedbacks;
 
-namespace Project.Gameplay.ItemManagement.Triggers
+namespace Items.Scripts
 {
     public class ItemPreviewTrigger : MonoBehaviour, MMEventListener<MMCameraEvent>
     {

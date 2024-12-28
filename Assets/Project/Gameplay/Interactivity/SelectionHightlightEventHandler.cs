@@ -1,4 +1,5 @@
 ﻿using HighlightPlus;
+using Items.Scripts;
 using Project.Gameplay.ItemManagement;
 using Project.Gameplay.ItemManagement.Triggers;
 using UnityEngine;

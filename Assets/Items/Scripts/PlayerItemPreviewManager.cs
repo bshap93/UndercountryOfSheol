@@ -8,7 +8,7 @@ using Project.Gameplay.Events;
 using Project.UI.HUD;
 using UnityEngine;
 
-namespace Project.Gameplay.Player.Inventory
+namespace Items.Scripts
 {
     public class PlayerItemPreviewManager : MonoBehaviour, MMEventListener<ItemEvent>
     {
