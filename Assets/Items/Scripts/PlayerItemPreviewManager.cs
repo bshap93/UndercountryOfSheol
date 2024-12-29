@@ -158,6 +158,16 @@ namespace Items.Scripts
             var Quantity = trigger.Quantity;
             var inventoryTagName = trigger.TargetInventoryTagName;
             
+            if (PrimaryInventory.gameObject.CompareTag(inventoryTagName))
+            {
+                // Doesn't change
+                
+            }
+            else if (SecondaryInventory.gameObject.CompareTag(inventoryTagName))
+            {
+                PrimaryInventory = SecondaryInventory;
+            }
+            else
             
             if (PrimaryInventory == null) Debug.LogWarning($"Target inventory '{inventoryTagName}' not found.");
             

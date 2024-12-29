@@ -1261,7 +1261,7 @@ MonoBehaviour:
   m_BlockingObjects: 0
   m_BlockingMask:
     serializedVersion: 2
-    m_Bits: 8380415
+    m_Bits: 8380215
 --- !u!114 &1711593608326336426
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1283,7 +1283,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7125163896626777965}
-  - component: {fileID: 7142067565311163792}
   - component: {fileID: 8606674232331642228}
   - component: {fileID: 1376603663539465324}
   m_Layer: 0
@@ -1313,21 +1312,6 @@ Transform:
   - {fileID: 8769768176559453131}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &7142067565311163792
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7551000699400255735}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3beb49fcc5880ec40a513dd74067c683, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Item: {fileID: 11400000, guid: 98caa6f09462e4b43956d295b22d78ba, type: 2}
-  Quantity: 1
-  pickedMmFeedbacks: {fileID: 8097671029486011925}
 --- !u!114 &8606674232331642228
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1341,8 +1325,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Item: {fileID: 11400000, guid: 98caa6f09462e4b43956d295b22d78ba, type: 2}
-  _selectionFeedbacks: {fileID: 0}
-  _deselectionFeedbacks: {fileID: 0}
+  _selectionFeedbacks: {fileID: 5574414872702170979}
+  _deselectionFeedbacks: {fileID: 2990275665744315278}
+  PickedMMFeedbacks: {fileID: 8097671029486011925}
+  TargetInventoryTagName: HotbarInventory
+  Quantity: 1
 --- !u!135 &1376603663539465324
 SphereCollider:
   m_ObjectHideFlags: 0
