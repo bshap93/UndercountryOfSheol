@@ -189,6 +189,11 @@ namespace Items.Scripts
             {
                 _promptManager.HidePickupPrompt();
             }
+            
+            if (_previewManager != null)
+            {
+                ClearPreview();
+            }
     
             if (trigger.PickedMMFeedbacks != null)
             {

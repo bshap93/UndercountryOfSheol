@@ -9774,7 +9774,7 @@ MonoBehaviour:
     m_Preset: {fileID: 0}
     m_BlockList: []
     m_Default: 1
-  m_SurfaceImpact: {fileID: 11400000, guid: cd5398187aff362478effacbcbb1010a, type: 2}
+  m_SurfaceImpact: {fileID: 11400000, guid: 8d265f95d76979647ae3d90f06c88211, type: 2}
   m_FootstepMode: 0
   m_Feet:
   - m_Object: {fileID: 3007243704357133374}
@@ -9910,7 +9910,7 @@ MonoBehaviour:
   m_ControllerInputMultiplier: 50
   m_MouseControllerUpdate: 1
   m_LookVectorMode: 0
-  m_LookSensitivity: {x: 2, y: 2}
+  m_LookSensitivity: {x: 4, y: 4}
   m_LookSensitivityMultiplier: 1
   m_SmoothLookSteps: 20
   m_SmoothLookWeight: 0.5
@@ -21990,9 +21990,9 @@ CapsuleCollider:
   m_Enabled: 1
   serializedVersion: 2
   m_Radius: 0.4
-  m_Height: 2
+  m_Height: 1.58
   m_Direction: 1
-  m_Center: {x: 0, y: 1, z: 0}
+  m_Center: {x: 0, y: 0.76, z: 0}
 --- !u!114 &3400093470217660845
 MonoBehaviour:
   m_ObjectHideFlags: 0
