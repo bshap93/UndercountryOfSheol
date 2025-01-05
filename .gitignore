@@ -79,6 +79,8 @@ Thumbs.db
 /[Aa]ssets/ExternalAssets*
 /[Aa]ssets/FirstPerson/Environment*
 /[Aa]ssets/Environment/External*    
+/[Aa]ssets/Environment/Assets*
+/[Aa]ssets/Audio/Assets*
 
 # Specific to your project structure
 /[Aa]ssets/Sirenix*
